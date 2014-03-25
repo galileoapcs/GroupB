@@ -1,3 +1,5 @@
+package Tetris;
+
 //TetrisBlock.java
 import info.gridworld.actor.*;
 import info.gridworld.grid.*;
@@ -70,6 +72,7 @@ public class TetrisBlock extends TetrisBug {
 			TetrisGame.nextTetrisBlock();
 	}
 
+	
 	/**
 	 * Move the TetrisBlock and its TetrisBugs one cell. (they should already be
 	 * facing down) Note: The order in which all the TetrisBugs move is important
@@ -124,7 +127,22 @@ public class TetrisBlock extends TetrisBug {
 	 * they can move, they will move one cell (to the right)
 	 */
 	public void moveLeft() {
-
+		setDirection(-90);
+		for (TetrisBug tb: blocks)
+			tb.setDirection(-90);
+		if (rotationPos == 0) {
+			if (canMove() && blocks.get(0).canMove()) {
+				blocks.get(0).move();
+				move();
+			}
+		} else if (rotationPos == 1) {
+			if (canMove()) {
+				
+				move();
+				blocks.get(0).move();
+			}
+		}
+		
 		// Your code goes here ... see Question 1
 
 	}
@@ -142,9 +160,15 @@ public class TetrisBlock extends TetrisBug {
 					getLocation().getCol() + 1);
 			if (gr.isValid(nextLoc) && gr.get(nextLoc) == null) {
 				moveTo(nextLoc);
-				rotationPos = (rotationPos + 1) % 2;// will be % 4 with 4 blocks
+				rotationPos = rotationPos + 1;// will be % 4 with 4 blocks
 			}
 		} else if (rotationPos == 1) {
+			nextLoc = new Location(getLocation().getRow() + 1,
+					getLocation().getCol() - 1);
+			if (gr.isValid(nextLoc) && gr.get(nextLoc) == null) {
+				moveTo(nextLoc);
+				rotationPos = rotationPos - 1;// will be % 4 with 4 blocks
+			}
 
 			// Your code goes here ... see Question 1
 			

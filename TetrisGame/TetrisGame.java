@@ -1,3 +1,5 @@
+package Tetris;
+
 //TetrisGame.java
 import info.gridworld.actor.*;
 import info.gridworld.grid.*;
@@ -70,23 +72,25 @@ public class TetrisGame {
 	public static void nextTetrisBlock() {
 
 		removeCompleteRows();
-		TetrisBlock randomBlock = new TetrisBlock();//default 2block piece
+		TetrisBlock randomBlock = null;//default 2block piece
 		//choose random block
 		int randNum = (int)(Math.random()*7)+1;//random number between 1 and 7
-		//if(randNum == 1)
-		// randomBlock = new TetrisBlockO();
-		//if(randNum == 2)
-		// randomBlock = new TetrisBlockI();
-		//if(randNum == 3)
-		// randomBlock = new TetrisBlockT();
-		//if(randNum == 4)
-		// randomBlock = new TetrisBlockL();
-		//if(randNum == 5)
-		// randomBlock = new TetrisBlock_L();
-		//if(randNum == 6)
-		// randomBlock = new TetrisBlockZ();
-		//if(randNum == 7)
-		// randomBlock = new TetrisBlock_Z();
+		if(randNum == 1)
+		 randomBlock = new TetrisBlockO();
+		else if(randNum == 2)
+		 randomBlock = new TetrisBlockI();
+		else if(randNum == 3)
+		 randomBlock = new TetrisBlockT();
+		else if(randNum == 4)
+		 randomBlock = new TetrisBlockL();
+		else if(randNum == 5)
+		 randomBlock = new TetrisBlock_L();
+		else if(randNum == 6)
+		 randomBlock = new TetrisBlockZ();
+		else if(randNum == 7)
+		 randomBlock = new TetrisBlock_Z();
+		//if (randNum == 1)
+			
 
 		currentBlock = randomBlock;
 	}
@@ -96,14 +100,58 @@ public class TetrisGame {
 	 * and ask each actor located above the just deleted row to act and
 	 * update the score++
 	 */
+	
+	private static boolean isFullRow (int i){
+		Grid<Actor> gr = world.getGrid();
+		int count = 0;
+		for (int j=1; j<=10; j++){
+			Location loc = new Location(i, j);
+			if (gr.get(loc) != null){
+				count ++;
+			}
+			if (count ==10)
+				return true;
+			
+		}
+		
+		return false;
+		
+	}
+	
+	
+	
 	public static void removeCompleteRows() {
 		Grid<Actor> gr = world.getGrid();
+		
+		for (int i=18; i>=1; i--){
+			if (isFullRow(i)){
+				for (int j=1; j<=10; j++){
+					Location loc = new Location(i, j);
+					gr.get(loc).removeSelfFromGrid();
+					
+				}
+				for (int x=i; x>=1; x--){
+					for (int j=1; j<=10; j++){
+						Location loc = new Location(x, j);
+						
+						if (gr.get(loc) != null)
+						(gr.get(loc)).moveTo(loc.getAdjacentLocation(180));
+						
+					}
+				}
+				i=18;
+			}
+		
+		
+		}
+			
+			
+		 
 
 		//Your code goes here ... see Question 2
 		
 
-	}
 	
-
-
+	
+	}
 }
